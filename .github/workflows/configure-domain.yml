@@ -10,14 +10,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Add Root Domain
-        run: npx wrangler pages domain add adrific adrific.fi
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-
-      - name: Add WWW Subdomain
-        run: npx wrangler pages domain add adrific www.adrific.fi
+      - name: Configure Domains
+        run: node scripts/add-domain.js
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
