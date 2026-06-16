@@ -1,16 +1,10 @@
-# Cloudflare Pages header rules. Unhashed assets (no build step) would
-# otherwise stick in a multi-hour browser cache and pair stale CSS/JS with
-# fresh HTML; max-age=0 + must-revalidate makes the browser revalidate each
-# load via ETag (cheap 304 when unchanged, instantly fresh on update).
+# Cloudflare Pages — security headers for every route.
+# Note: asset cache freshness is handled by versioned ?v= URLs in index.html.
+# Pages ignores _headers Cache-Control on static assets (enforces max-age=14400),
+# so cache directives are intentionally NOT set here.
 
-/
-  Cache-Control: public, max-age=0, must-revalidate
-
-/index.html
-  Cache-Control: public, max-age=0, must-revalidate
-
-/styles/*
-  Cache-Control: public, max-age=0, must-revalidate
-
-/scripts/*
-  Cache-Control: public, max-age=0, must-revalidate
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: SAMEORIGIN
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), browsing-topics=()
