@@ -1,0 +1,15 @@
+# Cloudflare Pages header rules.
+# The site assets are unhashed (no build step), so without this a returning
+# visitor can keep stale main.css/main.js for hours and pair them with fresh
+# HTML (broken styles, old behaviour). max-age=0 + must-revalidate makes the
+# browser revalidate every load via ETag — a cheap 304 when unchanged, and
+# instantly fresh when we ship an update.
+
+/
+  Cache-Control: public, max-age=0, must-revalidate
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+/styles/*
+  Cache-Control: public, max-age=0, must-revalidate
+/scripts/*
+  Cache-Control: public, max-age=0, must-revalidate
