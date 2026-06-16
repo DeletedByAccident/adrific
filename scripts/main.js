@@ -40,22 +40,169 @@
     })();
 
     /* ---------------------------------------------------------------
+       Theme toggle (light / dark). Initial theme is set pre-paint by the
+       inline <head> script (saved choice or system preference).
+    --------------------------------------------------------------- */
+    (function theme() {
+        var btn = document.querySelector('.theme-toggle');
+        var meta = document.querySelector('meta[name="theme-color"]');
+        var COLOR = { light: '#f4f7f1', dark: '#0b0b0b' };
+        function mode() { return docEl.getAttribute('data-theme') ? 'dark' : 'light'; }
+        function apply(m) {
+            if (m === 'dark') docEl.setAttribute('data-theme', 'dark');
+            else docEl.removeAttribute('data-theme');
+            if (meta) meta.setAttribute('content', COLOR[m]);
+            if (btn) {
+                btn.setAttribute('aria-pressed', String(m === 'dark'));
+                btn.setAttribute('aria-label', m === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+            }
+        }
+        apply(mode()); // sync meta + button state with the pre-painted theme
+        if (!btn) return;
+        btn.addEventListener('click', function () {
+            var next = mode() === 'dark' ? 'light' : 'dark';
+            apply(next);
+            try { localStorage.setItem('adrific-theme', next); } catch (e) {}
+        });
+    })();
+
+    /* ---------------------------------------------------------------
+       Language — EN authored in the HTML; FI is an overlay. Initial
+       <html lang> is set pre-paint by the inline <head> script
+       (saved choice or browser language). Finnish flagged for native
+       review — see TODO.
+    --------------------------------------------------------------- */
+    (function i18n() {
+        var q = function (s) { return document.querySelector(s); };
+        var qa = function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
+
+        var EN_TITLE = document.title;
+        var FI_TITLE = 'AdRific — Digitaalinen studio Helsingissä';
+
+        var T = []; // innerHTML targets: {el, en, fi}
+        var A = []; // attribute targets: {el, name, en, fi}
+        function reg(el, fi) { if (el && fi != null) T.push({ el: el, en: el.innerHTML, fi: fi }); }
+        function regList(sel, arr) { qa(sel).forEach(function (el, i) { if (arr[i] != null) reg(el, arr[i]); }); }
+        function attr(el, name, fi) { if (el && fi != null) A.push({ el: el, name: name, en: el.getAttribute(name), fi: fi }); }
+
+        // Small repeated labels, matched by their English text.
+        var LABELS = {
+            'Type': 'Tyyppi', 'Platform': 'Alusta', 'Link': 'Linkki', 'Status': 'Tila',
+            'Project': 'Projekti', 'Discipline': 'Toimiala', 'Scale': 'Mittakaava', 'Sheet': 'Lehti',
+            'Drawn by': 'Piirtänyt', 'Address': 'Osoite', 'VAT': 'ALV', 'Contact': 'Yhteys',
+            'Date': 'Päiväys', 'Rev': 'Ver.', 'Live': 'Käytössä', 'Beta': 'Beta', 'Internal test': 'Sisäinen testi'
+        };
+        qa('.plate__meta dt, .tb-cell__k, .tag').forEach(function (el) {
+            var en = el.textContent.trim(); if (LABELS[en]) reg(el, LABELS[en]);
+        });
+
+        // Nav + skip link
+        regList('.nav__links a', ['Työt', 'Studio', 'Ota yhteyttä']);
+        reg(q('.skip-link'), 'Siirry sisältöön');
+
+        // Hero
+        reg(q('.kicker'), 'AdRific — Digitaalinen studio · Helsinki');
+        reg(q('.hero__title'), 'Emme lupaile.<br><span class="hero__title-em">Me toimitamme.</span>');
+        reg(q('.hero__lede'), 'Pieni studio Helsingissä. Alla on se, mitä olemme suunnitelleet, rakentaneet ja tuoneet maailmaan.');
+        reg(q('.btn--stamp'), 'Katso työt <span aria-hidden="true">↓</span>');
+        reg(q('.btn--ghost'), 'Ota yhteyttä');
+        reg(q('.hero__caption'), 'KUVA 01 — kuusi tuotetta ja lisää tulossa, sekä valittuja asiakastöitä.');
+        reg(q('.hero__plate-label'), 'RAKENNE · GENEROITU LIVENÄ');
+        regList('.hero__rule .mono', ['A — STUDIO', 'VIERITÄ ↓']);
+
+        // Work / build log
+        reg(q('.work .section-head__tag'), 'Lehti A — Tuotteet käytössä');
+        reg(q('#work-title'), 'Rakennusloki');
+        reg(q('.work .section-head__intro'), 'Kuusi tuotetta käytössä. Suunnittelemme, rakennamme ja pyöritämme ne alusta loppuun — samalla tekniikalla ja tasolla kuin asiakastyöt.');
+        regList('.work .plate .plate__desc', [
+            'Takuuajan hallinta uudiskohteiden taloyhtiöille. Vapaaehtoiset hallitukset keräävät rakennusvirheet, laativat reklamaatiot eivätkä myöhästy lakisääteisistä määräajoista kymmenen vuoden vastuuaikana — ilman juridista erityisosaamista.',
+            'Vuokraa autopaikka helposti. Etsi, varaa ja hallitse pysäköintiä koko Suomessa yhdestä paikasta.',
+            'Ampumaharjoittelun seuranta ja valmentaja radalle. Kirjaa jokainen laukaus, saa heti korjaukset otteeseen, asentoon ja liipaisuun, lue lämpökartat ja kehitys harjoitusten välillä, ja kisaa kavereita vastaan reaaliajassa.',
+            'Estää ilmoitusroskan välittömästi. Chrome-laajennus ja Android-sovellus suodattavat push-ilmoitusten tulvan reaaliaikaista roskatietokantaa vasten — ennen kuin ne tavoittavat sinut.',
+            'Todistettavan reilut arvonnat someen. Tuo kommentit yhdellä klikkauksella Facebookista ja YouTubesta ja suorita kryptografisesti todennettava arvonta — voittajat, joita kukaan ei voi kiistää, ja matematiikka, jonka kuka tahansa voi tarkistaa.',
+            'Riippumaton työkalu suomalaiselle metsänomistajalle — kartta, arvonmääritys, hoitomuistutukset ja neutraali puukauppa <em>talousmetsälle</em>, kaikki yhdessä paikassa.'
+        ]);
+        reg(qa('.work .plate .plate__name')[5], 'Metsäomaisuuden seuranta'); // forest working title
+
+        // Client work (healthcare delivery)
+        reg(q('.delivery__tag'), 'Asiakastyö · Terveydenhuolto');
+        reg(q('.delivery__title'), 'Etävastaanotot, rakennettu niin ettemme koskaan säilytä potilastietoa.');
+        reg(q('.delivery__desc'), 'Toimitimme kolme etävastaanottoalustaa lääkärille, joka siirsi vastaanottonsa verkkoon — turvallisiksi suunniteltuna alusta alkaen. Auditoidut, vaatimustenmukaiset kolmannet osapuolet säilyttävät potilastiedot ja -rekisterit; ne eivät koskaan kosketa palvelimiamme. Luottamus on arkkitehtuurissa, ei lupauksessa.');
+        regList('.delivery__specs li', [
+            'Kolme etävastaanottoalustaa', 'Turvallisuus suunniteltu alusta alkaen',
+            'Auditoitu kolmannen osapuolen tietojenkäsittely', 'Ei potilastietoa palvelimillamme'
+        ]);
+
+        // Studio
+        reg(q('.studio .section-head__tag'), 'Lehti C — AdRific');
+        reg(q('#studio-title'), 'Studio');
+        reg(q('.studio__lead'), 'AdRific on pieni rakentajien studio Helsingissä — palvelemme asiakkaita maailmanlaajuisesti.');
+        reg(q('.studio__body'), 'Kirjoitamme koodin ja pyöritämme kampanjat itse — ei välikäsiä, ei luovutuksia. Työt täällä pitävät meidät terävinä: oikeita asioita oikeassa käytössä, samalla rimalla jonka itse asetamme. Siinä koko ansioluettelo.');
+        regList('.studio__facts li', [
+            '<span>Sijainti</span> Helsinki, Suomi',
+            '<span>Kattavuus</span> Maailmanlaajuinen',
+            '<span>Osaaminen</span> Ohjelmistot · Mainonta · Kasvu'
+        ]);
+
+        // Contact
+        reg(q('.contact .section-head__tag'), 'Lehti D — Yhteys');
+        reg(q('#contact-title'), 'Ota yhteyttä.');
+        reg(q('.contact__lede'), 'Kiinnostaako työt, vai haluatko vain jutella? Meidät tavoittaa helposti.');
+        reg(q('.stamp__kicker'), 'Sano hei');
+        reg(q('.stamp__main'), 'Ota yhteyttä');
+
+        // Footer title-block values (keys handled by LABELS above)
+        regList('.tb-cell__v', [
+            'AdRific — Digitaalinen studio', 'Ohjelmistot · Mainonta · Kasvu', '1:1', '01 / 01',
+            'AdRific Oy', 'Postiljooninkatu 13 A 19, 00240 Helsinki, FI', 'FI28112047',
+            '<a href="mailto:contact@adrific.fi">contact@adrific.fi</a>', '2026', 'A'
+        ]);
+        reg(q('.title-block__copy'), '© 2026 AdRific Oy. Piirretty Helsingissä.');
+
+        // Meta + aria
+        attr(q('meta[name="description"]'), 'content', 'AdRific on pieni digitaalinen studio Helsingissä. Katsaus tuotteisiin ja asiakastöihin, jotka olemme suunnitelleet, rakentaneet ja julkaisseet. Emme lupaile. Me toimitamme.');
+        attr(q('meta[property="og:title"]'), 'content', 'AdRific — Digitaalinen studio Helsingissä');
+        attr(q('meta[property="og:description"]'), 'content', 'Katsaus tuotteisiin ja asiakastöihin, jotka olemme suunnitelleet, rakentaneet ja julkaisseet.');
+        attr(q('meta[property="og:locale"]'), 'content', 'fi_FI');
+        attr(q('.brand'), 'aria-label', 'AdRific — etusivu');
+        attr(q('.hero__svg'), 'aria-label', 'Isometrinen rakennehila piirrettynä teknisenä kaaviona, mitoitusviivoin.');
+
+        function apply(lang) {
+            var fi = lang === 'fi';
+            T.forEach(function (t) { t.el.innerHTML = fi ? t.fi : t.en; });
+            A.forEach(function (a) { a.el.setAttribute(a.name, fi ? a.fi : (a.en || '')); });
+            document.title = fi ? FI_TITLE : EN_TITLE;
+            docEl.setAttribute('lang', lang);
+            qa('.lang-switch__btn').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.lang === lang)); });
+        }
+
+        var saved = null;
+        try { saved = localStorage.getItem('adrific-lang'); } catch (e) {}
+        apply((saved === 'en' || saved === 'fi') ? saved : (docEl.getAttribute('lang') === 'fi' ? 'fi' : 'en'));
+
+        qa('.lang-switch__btn').forEach(function (b) {
+            b.addEventListener('click', function () {
+                apply(b.dataset.lang);
+                try { localStorage.setItem('adrific-lang', b.dataset.lang); } catch (e) {}
+            });
+        });
+    })();
+
+    /* ---------------------------------------------------------------
        Reveal on scroll — enhances an already-visible default
     --------------------------------------------------------------- */
     (function reveals() {
         if (reduceMotion.matches) return; // content stays visible, no pre-hide
 
         var belowFold = document.querySelectorAll(
-            '.work .section-head, .work .plate, .services .section-head, ' +
-            '.capabilities .cap, .services__throughline, .studio__inner, ' +
-            '.contact__inner, .title-block'
+            '.work .section-head, .work .plate, .work .delivery, ' +
+            '.studio__inner, .contact__inner, .title-block'
         );
         Array.prototype.forEach.call(belowFold, function (el) { el.classList.add('reveal'); });
 
         var plate = document.querySelector('.hero__plate');
         if (plate) plate.style.setProperty('--reveal-delay', '120ms');
         stagger(document.querySelectorAll('.work .plate'), 70);
-        stagger(document.querySelectorAll('.capabilities .cap'), 90);
 
         var items = document.querySelectorAll('.reveal');
         if (!('IntersectionObserver' in window)) {
@@ -108,31 +255,40 @@
             var v = cs.getPropertyValue(name).trim();
             return v || fallback;
         }
-        var COL = {
-            line: tok('--green-500', '#2f8f63'),
-            node: tok('--green-700', '#246b4a'),
-            dim: tok('--ink-muted', '#5c685f'),
-            signal: tok('--signal', '#df5a37'),
-            grid: tok('--grid-line', '#dde7e0')
-        };
+        var COL = {};
+        function resolveColors() {
+            COL.line = tok('--green-500', '#2f8f63');
+            COL.node = tok('--green-700', '#246b4a');
+            COL.dim = tok('--ink-muted', '#5c685f');
+            COL.signal = tok('--signal', '#df5a37');
+            COL.grid = tok('--grid-line', '#dde7e0');
+        }
+        resolveColors();
+        // Re-read tokens when the theme flips so the lattice recolors live.
+        new MutationObserver(resolveColors).observe(docEl, { attributes: true, attributeFilter: ['data-theme'] });
 
         var COLS = 13, ROWS = 13;
-        var edges = buildEdges();          // sorted for a diagonal draw-in sweep
-        var nodes = [];                    // projected positions, refreshed per frame
+        var edges = buildEdges();   // [i,j,i2,j2], sorted for the draw-in sweep
+        var nodes = [];             // projected [sx, sy, depth] per (i,j)
 
         var W = 0, H = 0, DPR = 1;
-        var t0 = null, progress = 0;
-        var REVEAL_MS = 1700;
-        var px = 0, py = 0, tpx = 0, tpy = 0; // pointer parallax (current / target)
-        var rafId = null, visible = true, drewOnce = false;
+        var t0 = null, REVEAL_MS = 1700;
+        var rafId = null, visible = true, lastTs = 0;
+
+        // 3D orientation: continuous auto-spin + drag-to-rotate with inertia
+        var SPIN = 0.18, TILT = -0.5;
+        var dragY = 0, dragX = 0, velY = 0, velX = 0, dragging = false, lastX = 0, lastY = 0;
+        var ay = 0, ax = TILT, scale = 1; // recomputed per frame
+
+        // roaming coral marker + its trail
+        var pen = { i: 6, j: 6, ti: 7, tj: 6, p: 0 };
+        var trail = [];
 
         function buildEdges() {
             var e = [];
-            for (var j = 0; j < ROWS; j++) {
-                for (var i = 0; i < COLS; i++) {
-                    if (i < COLS - 1) e.push([i, j, i + 1, j]);
-                    if (j < ROWS - 1) e.push([i, j, i, j + 1]);
-                }
+            for (var j = 0; j < ROWS; j++) for (var i = 0; i < COLS; i++) {
+                if (i < COLS - 1) e.push([i, j, i + 1, j]);
+                if (j < ROWS - 1) e.push([i, j, i, j + 1]);
             }
             e.sort(function (a, b) { return (a[0] + a[1]) - (b[0] + b[1]); });
             return e;
@@ -147,93 +303,88 @@
             ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
         }
 
-        function project(i, j, t) {
-            var gx = i / (COLS - 1) - 0.5;
-            var gy = j / (ROWS - 1) - 0.5;
-            var z = Math.sin(gx * 4.2 + t * 0.55) * Math.cos(gy * 4.2 + t * 0.4) * 0.11;
-            var scale = Math.min(W, H) * 0.86;
-            var isoX = (gx - gy) * Math.cos(0.52);
-            var isoY = (gx + gy) * Math.sin(0.52) - z;
-            return [
-                W / 2 + isoX * scale + px * 20,
-                H * 0.5 + isoY * scale + py * 14,
-                z
-            ];
-        }
+        function clamp(v, lo, hi) { return v < lo ? lo : v > hi ? hi : v; }
 
-        function refreshNodes(t) {
-            for (var j = 0; j < ROWS; j++) {
-                for (var i = 0; i < COLS; i++) {
-                    nodes[j * COLS + i] = project(i, j, t);
-                }
-            }
+        // model point on the XZ plane, height in Y (a gently waving terrain)
+        function model(i, j, t) {
+            var mx = i / (COLS - 1) - 0.5;
+            var mz = j / (ROWS - 1) - 0.5;
+            var my = Math.sin(mx * 5 + t * 0.7) * Math.cos(mz * 5 + t * 0.5) * 0.14;
+            return [mx, my, mz];
+        }
+        // rotate (Y then X) + perspective-project to screen; returns [sx, sy, depth]
+        function project(m) {
+            var c = Math.cos(ay), s = Math.sin(ay);
+            var x1 = m[0] * c + m[2] * s, z1 = -m[0] * s + m[2] * c, y1 = m[1];
+            var cx = Math.cos(ax), sx = Math.sin(ax);
+            var y2 = y1 * cx - z1 * sx, z2 = y1 * sx + z1 * cx;
+            var persp = 2.6 / (2.6 - z2);
+            return [W / 2 + x1 * scale * persp, H * 0.52 + y2 * scale * persp, z2];
         }
         function P(i, j) { return nodes[j * COLS + i]; }
+        function shade(z) { return clamp((z + 0.55) / 1.1, 0, 1); } // 0 far .. 1 near
 
         function draw(ts) {
             rafId = null;
             if (W < 2 || H < 2) { schedule(); return; } // size not ready yet
             if (t0 === null) t0 = ts;
             var elapsed = ts - t0;
-            progress = Math.min(1, elapsed / REVEAL_MS);
-            var eased = 1 - Math.pow(1 - progress, 3); // ease-out-cubic
+            var eased = 1 - Math.pow(1 - Math.min(1, elapsed / REVEAL_MS), 3);
             var t = elapsed / 1000;
 
-            // pointer parallax easing
-            px += (tpx - px) * 0.06;
-            py += (tpy - py) * 0.06;
+            // orientation: auto-spin + accumulated drag (inertia when released)
+            if (!dragging) { dragY += velY; velY *= 0.94; dragX += velX; velX *= 0.9; }
+            dragX = clamp(dragX, -0.7, 0.5);
+            ay = t * SPIN + dragY;
+            ax = clamp(TILT + dragX, -1.2, 0.25);
+            scale = Math.min(W, H) * 0.58;
 
-            refreshNodes(t);
+            for (var j = 0; j < ROWS; j++) for (var i = 0; i < COLS; i++) nodes[j * COLS + i] = project(model(i, j, t));
+
             ctx.clearRect(0, 0, W, H);
-
-            // faint internal construction grid
             drawBackGrid();
 
-            // lattice edges (progressive during reveal, full after)
-            var shown = eased * edges.length;
-            var full = Math.floor(shown);
-            var frac = shown - full;
-
-            ctx.lineWidth = 1.1;
-            ctx.lineJoin = 'round';
-            ctx.lineCap = 'round';
-            ctx.strokeStyle = COL.line;
-            for (var k = 0; k < full && k < edges.length; k++) strokeEdge(edges[k], 1);
-            var lead = null;
-            if (full < edges.length && frac > 0) {
-                strokeEdge(edges[full], frac);
-                lead = edges[full];
-            }
-
-            // nodes (fade in with reveal)
-            ctx.fillStyle = COL.node;
-            var nodeShown = Math.floor(eased * COLS * ROWS);
-            var shownCount = 0;
-            for (var jj = 0; jj < ROWS; jj++) {
-                for (var ii = 0; ii < COLS; ii++) {
-                    if (shownCount++ > nodeShown) break;
-                    var p = P(ii, jj);
-                    ctx.beginPath();
-                    ctx.arc(p[0], p[1], 1.4, 0, Math.PI * 2);
-                    ctx.fill();
+            ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.strokeStyle = COL.line;
+            if (eased >= 1) {
+                // full structure, painted far-to-near with depth shading
+                var order = edges.map(function (e, k) { return [k, (P(e[0], e[1])[2] + P(e[2], e[3])[2]) / 2]; });
+                order.sort(function (a, b) { return a[1] - b[1]; });
+                for (var o = 0; o < order.length; o++) {
+                    var d = shade(order[o][1]);
+                    ctx.globalAlpha = 0.26 + 0.64 * d; ctx.lineWidth = 0.7 + 1.0 * d;
+                    strokeEdge(edges[order[o][0]], 1);
                 }
+            } else {
+                // assemble: reveal edges in the diagonal sweep order
+                var shown = eased * edges.length, full = Math.floor(shown);
+                for (var k = 0; k < full && k < edges.length; k++) {
+                    var dd = shade((P(edges[k][0], edges[k][1])[2] + P(edges[k][2], edges[k][3])[2]) / 2);
+                    ctx.globalAlpha = 0.26 + 0.64 * dd; ctx.lineWidth = 0.7 + 1.0 * dd;
+                    strokeEdge(edges[k], 1);
+                }
+                if (full < edges.length) { ctx.globalAlpha = 0.7; ctx.lineWidth = 1; strokeEdge(edges[full], shown - full); }
             }
+            ctx.globalAlpha = 1;
 
-            // dimension annotations (after the structure is mostly drawn)
-            if (eased > 0.55) drawDimensions((eased - 0.55) / 0.45);
+            // nodes, depth-shaded
+            ctx.fillStyle = COL.node;
+            var shownNodes = eased >= 1 ? COLS * ROWS : Math.floor(eased * COLS * ROWS);
+            var cnt = 0;
+            for (var jj = 0; jj < ROWS; jj++) for (var ii = 0; ii < COLS; ii++) {
+                if (cnt++ > shownNodes) break;
+                var p = P(ii, jj), d2 = shade(p[2]);
+                ctx.globalAlpha = 0.3 + 0.7 * d2;
+                ctx.beginPath(); ctx.arc(p[0], p[1], 0.9 + 1.4 * d2, 0, Math.PI * 2); ctx.fill();
+            }
+            ctx.globalAlpha = 1;
 
-            // the coral pen tip
-            drawPen(t, eased, lead);
-
-            drewOnce = true;
-            // keep animating: reveal not finished, OR ambient breathing
+            drawPen(t, eased, elapsed);
             schedule();
         }
 
         function strokeEdge(e, frac) {
-            var a = P(e[0], e[1]); var b = P(e[2], e[3]);
-            ctx.beginPath();
-            ctx.moveTo(a[0], a[1]);
+            var a = P(e[0], e[1]), b = P(e[2], e[3]);
+            ctx.beginPath(); ctx.moveTo(a[0], a[1]);
             if (frac >= 1) ctx.lineTo(b[0], b[1]);
             else ctx.lineTo(a[0] + (b[0] - a[0]) * frac, a[1] + (b[1] - a[1]) * frac);
             ctx.stroke();
@@ -241,84 +392,77 @@
 
         function drawBackGrid() {
             ctx.save();
-            ctx.strokeStyle = COL.grid;
-            ctx.lineWidth = 1;
-            var step = 28;
-            ctx.beginPath();
+            ctx.strokeStyle = COL.grid; ctx.lineWidth = 1; ctx.globalAlpha = 0.5;
+            var step = 28; ctx.beginPath();
             for (var x = (W / 2) % step; x < W; x += step) { ctx.moveTo(x, 0); ctx.lineTo(x, H); }
             for (var y = (H / 2) % step; y < H; y += step) { ctx.moveTo(0, y); ctx.lineTo(W, y); }
-            ctx.globalAlpha = 0.5;
-            ctx.stroke();
-            ctx.restore();
+            ctx.stroke(); ctx.restore();
         }
 
-        function drawDimensions(a) {
-            a = Math.min(1, a);
-            var topL = P(0, 0), topR = P(COLS - 1, 0);
-            // bottom span line under the lattice
-            var minY = Math.max(P(0, ROWS - 1)[1], P(COLS - 1, ROWS - 1)[1]);
-            var y = minY + 26;
-            var x1 = P(0, ROWS - 1)[0], x2 = P(COLS - 1, ROWS - 1)[0];
-            var xe = x1 + (x2 - x1) * a;
-            ctx.save();
-            ctx.strokeStyle = COL.dim; ctx.fillStyle = COL.dim; ctx.lineWidth = 1;
-            ctx.globalAlpha = 0.85;
-            ctx.beginPath();
-            ctx.moveTo(x1, y); ctx.lineTo(xe, y);
-            ctx.moveTo(x1, y - 4); ctx.lineTo(x1, y + 4);
-            if (a > 0.98) { ctx.moveTo(x2, y - 4); ctx.lineTo(x2, y + 4); }
-            ctx.stroke();
-            if (a > 0.98) {
-                ctx.font = '10px "Spline Sans Mono", ui-monospace, monospace';
-                ctx.textAlign = 'center'; ctx.textBaseline = 'top';
-                ctx.fillText('SPAN — 12U', (x1 + x2) / 2, y + 6);
-            }
-            // top tie line to the apex marker
-            ctx.setLineDash([3, 4]);
-            ctx.beginPath();
-            ctx.moveTo((topL[0] + topR[0]) / 2, (topL[1] + topR[1]) / 2);
-            ctx.lineTo((topL[0] + topR[0]) / 2, 14);
-            ctx.stroke();
-            ctx.restore();
-        }
-
-        function drawPen(t, eased, lead) {
-            var p;
-            if (eased < 1 && lead) {
-                p = P(lead[2], lead[3]); // leading vertex while drawing
+        // coral marker: rides the build during reveal, then roams node-to-node
+        function drawPen(t, eased, elapsed) {
+            var m;
+            if (eased < 1) {
+                var e = edges[Math.min(edges.length - 1, Math.floor(eased * edges.length))];
+                pen.i = pen.ti = e[2]; pen.j = pen.tj = e[3]; pen.p = 0;
+                m = model(e[2], e[3], t);
             } else {
-                // after reveal, walk the top row back and forth
-                var f = (Math.sin(t * 0.5) * 0.5 + 0.5) * (COLS - 1);
-                var i = Math.floor(f), fr = f - i;
-                var a = P(i, 0), b = P(Math.min(i + 1, COLS - 1), 0);
-                p = [a[0] + (b[0] - a[0]) * fr, a[1] + (b[1] - a[1]) * fr];
+                var dt = lastTs ? Math.min(0.05, (elapsed - lastTs) / 1000) : 0.016;
+                pen.p += dt / 0.5; // ~0.5s per hop
+                if (pen.p >= 1) {
+                    pen.p = 0; pen.i = pen.ti; pen.j = pen.tj;
+                    var dirs = [[1, 0], [-1, 0], [0, 1], [0, -1]], opts = [];
+                    for (var k = 0; k < 4; k++) {
+                        var ni = pen.i + dirs[k][0], nj = pen.j + dirs[k][1];
+                        if (ni >= 0 && ni < COLS && nj >= 0 && nj < ROWS) opts.push([ni, nj]);
+                    }
+                    var pick = opts[Math.floor(Math.random() * opts.length)];
+                    pen.ti = pick[0]; pen.tj = pick[1];
+                }
+                var e2 = 1 - Math.pow(1 - pen.p, 2);
+                var a = model(pen.i, pen.j, t), b = model(pen.ti, pen.tj, t);
+                m = [a[0] + (b[0] - a[0]) * e2, a[1] + (b[1] - a[1]) * e2, a[2] + (b[2] - a[2]) * e2];
             }
+            lastTs = elapsed;
+            var s = project(m);
+            trail.push([s[0], s[1]]); if (trail.length > 16) trail.shift();
             ctx.save();
-            // leader line
-            ctx.strokeStyle = COL.signal; ctx.lineWidth = 1.2;
-            ctx.beginPath(); ctx.moveTo(p[0], p[1]); ctx.lineTo(p[0] + 16, p[1] - 16); ctx.stroke();
-            // dot
+            ctx.strokeStyle = COL.signal; ctx.lineCap = 'round';
+            for (var i = 1; i < trail.length; i++) {
+                var f = i / trail.length;
+                ctx.globalAlpha = f * 0.6; ctx.lineWidth = 1.8 * f;
+                ctx.beginPath(); ctx.moveTo(trail[i - 1][0], trail[i - 1][1]); ctx.lineTo(trail[i][0], trail[i][1]); ctx.stroke();
+            }
+            ctx.globalAlpha = 1; ctx.lineWidth = 1.2;
+            ctx.beginPath(); ctx.moveTo(s[0], s[1]); ctx.lineTo(s[0] + 15, s[1] - 15); ctx.stroke();
             ctx.fillStyle = COL.signal;
-            ctx.beginPath(); ctx.arc(p[0], p[1], 3.4, 0, Math.PI * 2); ctx.fill();
-            // ring
+            ctx.beginPath(); ctx.arc(s[0], s[1], 3.4, 0, Math.PI * 2); ctx.fill();
             ctx.globalAlpha = 0.5;
-            ctx.beginPath(); ctx.arc(p[0], p[1], 7, 0, Math.PI * 2); ctx.stroke();
+            ctx.beginPath(); ctx.arc(s[0], s[1], 7, 0, Math.PI * 2); ctx.stroke();
             ctx.restore();
         }
 
-        function schedule() {
-            if (!rafId && visible) rafId = requestAnimationFrame(draw);
-        }
+        function schedule() { if (!rafId && visible) rafId = requestAnimationFrame(draw); }
         function stop() { if (rafId) { cancelAnimationFrame(rafId); rafId = null; } }
 
-        // pointer parallax (relative to plate center)
-        var plate = canvas.parentElement;
-        plate.addEventListener('pointermove', function (e) {
-            var r = plate.getBoundingClientRect();
-            tpx = ((e.clientX - r.left) / r.width - 0.5) * 2;
-            tpy = ((e.clientY - r.top) / r.height - 0.5) * 2;
+        // drag-to-rotate (mouse / pen only — leave touch free for page scroll)
+        canvas.style.cursor = 'grab';
+        canvas.addEventListener('pointerdown', function (e) {
+            if (e.pointerType === 'touch') return;
+            dragging = true; lastX = e.clientX; lastY = e.clientY; velY = velX = 0;
+            canvas.style.cursor = 'grabbing';
+            try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
         });
-        plate.addEventListener('pointerleave', function () { tpx = 0; tpy = 0; });
+        canvas.addEventListener('pointermove', function (e) {
+            if (!dragging) return;
+            velY = (e.clientX - lastX) * 0.008; velX = (e.clientY - lastY) * 0.006;
+            dragY += velY; dragX += velX;
+            lastX = e.clientX; lastY = e.clientY;
+        });
+        function endDrag() { dragging = false; canvas.style.cursor = 'grab'; }
+        canvas.addEventListener('pointerup', endDrag);
+        canvas.addEventListener('pointercancel', endDrag);
+        canvas.addEventListener('pointerleave', endDrag);
 
         // pause when off-screen / tab hidden
         if ('IntersectionObserver' in window) {
@@ -331,12 +475,10 @@
             if (document.hidden) stop(); else if (visible) schedule();
         });
 
-        // Keep the bitmap matched to the rendered size. ResizeObserver fires
-        // once layout is known (fixing the first-paint zero-size race that made
-        // the canvas a 1x1 upscaled block) and on every size change thereafter.
+        // Keep the bitmap matched to the rendered size (also fixes the first-paint
+        // zero-size race that once upscaled a 1x1 canvas into a solid block).
         if ('ResizeObserver' in window) {
-            var ro = new ResizeObserver(function () { resize(); schedule(); });
-            ro.observe(canvas);
+            new ResizeObserver(function () { resize(); schedule(); }).observe(canvas);
         } else {
             var resizeRAF = null;
             window.addEventListener('resize', function () {
@@ -346,13 +488,12 @@
         }
 
         // boot — defer one frame so layout (and the canvas-live display swap) settle
-        docEl.classList.add('canvas-live'); // CSS reveals canvas + hides SVG only now
+        docEl.classList.add('canvas-live');
         requestAnimationFrame(function () { resize(); schedule(); });
 
-        // if the user switches to reduced motion mid-session, bail out gracefully
-        var onPref = function () {
+        // bail out gracefully if the user switches to reduced motion mid-session
+        if (reduceMotion.addEventListener) reduceMotion.addEventListener('change', function () {
             if (reduceMotion.matches) { stop(); docEl.classList.remove('canvas-live'); }
-        };
-        if (reduceMotion.addEventListener) reduceMotion.addEventListener('change', onPref);
+        });
     })();
 })();

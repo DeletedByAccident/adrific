@@ -4,14 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>document.documentElement.classList.add('js');</script>
+    <script>
+      (function () {
+        var d = document.documentElement; d.classList.add('js');
+        try {
+          var saved = localStorage.getItem('adrific-theme');
+          var theme = (saved === 'light' || saved === 'dark') ? saved
+            : (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+          if (theme === 'dark') d.setAttribute('data-theme', 'dark');
+          var lang = localStorage.getItem('adrific-lang');
+          if (lang !== 'en' && lang !== 'fi') lang = (navigator.language || 'en').toLowerCase().indexOf('fi') === 0 ? 'fi' : 'en';
+          d.setAttribute('lang', lang);
+        } catch (e) {}
+      })();
+    </script>
     <title>AdRific — Digital studio in Helsinki</title>
     <meta name="description"
-        content="AdRific is a Helsinki digital studio engineering custom software and ad performance — and shipping its own products to prove it. We don't pitch. We ship.">
+        content="AdRific is a small digital studio in Helsinki. A reference of the products and client work we've designed, built, and shipped. We don't pitch. We ship.">
     <meta name="theme-color" content="#f4f7f1">
     <meta property="og:title" content="AdRific — Digital studio in Helsinki">
     <meta property="og:description"
-        content="We engineer custom software and ad performance — and ship our own products to prove it.">
+        content="A reference of the products and client work we've designed, built, and shipped.">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="en">
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -52,20 +65,39 @@
                 <span class="brand__word">AdRific</span>
             </a>
 
+            <ul class="nav__links" id="nav-menu">
+                <li><a href="#work">Work</a></li>
+                <li><a href="#studio">Studio</a></li>
+                <li><a href="#contact" class="nav__cta">Contact</a></li>
+            </ul>
+
+            <div class="masthead__util">
+                <div class="lang-switch" role="group" aria-label="Language / Kieli">
+                    <button type="button" class="lang-switch__btn" data-lang="en" aria-pressed="true">EN</button>
+                    <button type="button" class="lang-switch__btn" data-lang="fi" aria-pressed="false">FI</button>
+                </div>
+                <button class="theme-toggle" type="button" aria-pressed="false"
+                    aria-label="Switch to dark theme" title="Toggle light / dark">
+                    <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+                        <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" stroke-linejoin="round" />
+                    </svg>
+                    <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+                        <circle cx="12" cy="12" r="4.2" />
+                        <path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"
+                            stroke-linecap="round" />
+                    </svg>
+                </button>
+            </div>
+
+            <p class="masthead__locator" aria-hidden="true">HEL · 60.17°N 24.94°E</p>
+
             <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu"
                 aria-label="Open menu">
                 <span class="nav__toggle-bar"></span>
                 <span class="nav__toggle-bar"></span>
             </button>
-
-            <ul class="nav__links" id="nav-menu">
-                <li><a href="#work">Work</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#studio">Studio</a></li>
-                <li><a href="#contact" class="nav__cta">Contact</a></li>
-            </ul>
-
-            <p class="masthead__locator" aria-hidden="true">HEL · 60.17°N 24.94°E</p>
         </nav>
     </header>
 
@@ -77,14 +109,14 @@
                     <p class="kicker">AdRific — Digital studio · Helsinki</p>
                     <h1 class="hero__title">We don't pitch.<br><span class="hero__title-em">We ship.</span></h1>
                     <p class="hero__lede">
-                        A Helsinki studio engineering custom software and ad performance — and shipping
-                        our own products to prove it.
+                        A small studio in Helsinki. Below is what we've designed, built, and put
+                        in the world.
                     </p>
                     <div class="hero__actions">
-                        <a href="#contact" class="btn btn--stamp">Start a project</a>
-                        <a href="#work" class="btn btn--ghost">See the work <span aria-hidden="true">↓</span></a>
+                        <a href="#work" class="btn btn--stamp">See the work <span aria-hidden="true">↓</span></a>
+                        <a href="#contact" class="btn btn--ghost">Get in touch</a>
                     </div>
-                    <p class="hero__caption mono">FIG. 01 — six products in the field, and counting.</p>
+                    <p class="hero__caption mono">FIG. 01 — six products and counting, plus selected client work.</p>
                 </div>
 
                 <div class="hero__plate reveal">
@@ -358,56 +390,39 @@
                     </div>
                 </li>
             </ol>
-        </section>
 
-        <!-- ░░ SERVICES / CAPABILITIES ░░ -->
-        <section class="services" id="services" aria-labelledby="services-title">
-            <header class="section-head">
-                <p class="section-head__tag mono">Sheet B — Client work</p>
-                <h2 class="section-head__title" id="services-title">What we build for you</h2>
-                <p class="section-head__intro">
-                    The portfolio above is how we stay sharp. Here's what that craft does for your business.
-                </p>
-            </header>
-
-            <div class="capabilities">
-                <article class="cap">
-                    <p class="cap__no mono">B1</p>
-                    <h3 class="cap__title">Custom software</h3>
-                    <p class="cap__desc">
-                        From a napkin sketch to a shipped product. Web and mobile applications engineered
-                        for speed, built to last, and owned by you — the same hands that built everything
-                        in the build log.
+            <article class="delivery" aria-labelledby="delivery-title">
+                <div class="delivery__body">
+                    <p class="delivery__tag mono">Client work · Healthcare</p>
+                    <h3 class="delivery__title" id="delivery-title">
+                        Remote care, built so we never hold a patient record.
+                    </h3>
+                    <p class="delivery__desc">
+                        We shipped three remote-appointment platforms for a doctor taking their practice
+                        online — engineered secure from the ground up. Audited, compliant third parties
+                        hold the patient data and the records; it never touches our servers. The trust is
+                        in the architecture, not a promise.
                     </p>
-                    <ul class="cap__list mono">
-                        <li>Product &amp; platform engineering</li>
-                        <li>Web apps · mobile apps · APIs</li>
-                        <li>From MVP to scale</li>
+                    <ul class="delivery__specs mono">
+                        <li>Three remote-appointment platforms</li>
+                        <li>Secure by design, ground-up</li>
+                        <li>Audited third-party data handling</li>
+                        <li>Zero patient records on our servers</li>
                     </ul>
-                </article>
-
-                <span class="capabilities__divider" aria-hidden="true"></span>
-
-                <article class="cap">
-                    <p class="cap__no mono">B2</p>
-                    <h3 class="cap__title">Ad management</h3>
-                    <p class="cap__desc">
-                        Performance advertising that earns its budget. Data-driven campaigns across
-                        platforms, managed end-to-end and measured to the cent — so spend turns into
-                        customers, not impressions.
-                    </p>
-                    <ul class="cap__list mono">
-                        <li>Paid search &amp; social</li>
-                        <li>Tracking &amp; attribution</li>
-                        <li>Reporting that tells the truth</li>
-                    </ul>
-                </article>
-            </div>
-
-            <p class="services__throughline">
-                <span class="mono">B3 —</span> Strategy is the through-line: we connect the software you
-                ship and the spend you run so they pull in the same direction.
-            </p>
+                </div>
+                <div class="delivery__plate" aria-hidden="true">
+                    <svg viewBox="0 0 180 196" fill="none">
+                        <path d="M90 20 L146 42 V90 C146 126 122 150 90 166 C58 150 34 126 34 90 V42 Z"
+                            stroke="var(--green-500)" stroke-width="1.6" stroke-linejoin="round" />
+                        <path d="M70 92 l13 15 l28 -36" stroke="var(--signal)" stroke-width="2.4"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M34 78 H12 M146 78 H168" stroke="var(--green-300)" stroke-width="1"
+                            stroke-dasharray="3 4" />
+                        <text x="90" y="188" text-anchor="middle" font-family="monospace" font-size="9"
+                            fill="var(--ink-muted)">PHI · OFF-PREMISES</text>
+                    </svg>
+                </div>
+            </article>
         </section>
 
         <!-- ░░ STUDIO / ABOUT ░░ -->
@@ -423,9 +438,8 @@
                     </p>
                     <p class="studio__body">
                         We write the code and run the campaigns ourselves — no handoffs, no middle layer.
-                        The products in the build log are how we keep our edge: real things, in real use,
-                        held to the exact bar we hold your work to. If we'll put our own name on it, we know
-                        how to build yours.
+                        The work here is how we keep our edge: real things, in real use, held to the bar we
+                        set ourselves. That's the whole résumé.
                     </p>
                     <ul class="studio__facts mono" aria-label="Studio facts">
                         <li><span>Based</span> Helsinki, Finland</li>
@@ -470,15 +484,14 @@
         <!-- ░░ CONTACT STAMP ░░ -->
         <section class="contact" id="contact" aria-labelledby="contact-title">
             <div class="contact__inner">
-                <p class="section-head__tag mono">Sheet D — Start</p>
-                <h2 class="contact__title" id="contact-title">Let's build yours.</h2>
+                <p class="section-head__tag mono">Sheet D — Contact</p>
+                <h2 class="contact__title" id="contact-title">Get in touch.</h2>
                 <p class="contact__lede">
-                    Tell us what you want to ship. We'll tell you how we'd build it — and what it takes.
+                    Curious about the work, or just want to talk shop? We're easy to reach.
                 </p>
-                <a class="stamp"
-                    href="mailto:contact@adrific.fi?subject=Project%20enquiry&body=Hi%20AdRific%2C%0A%0AWe'd%20like%20to%20build%3A%0A">
-                    <span class="stamp__kicker mono">Request for proposal</span>
-                    <span class="stamp__main">Start a project</span>
+                <a class="stamp" href="mailto:contact@adrific.fi?subject=Hello%20AdRific">
+                    <span class="stamp__kicker mono">Say hello</span>
+                    <span class="stamp__main">Get in touch</span>
                     <span class="stamp__addr mono">contact@adrific.fi</span>
                 </a>
             </div>
