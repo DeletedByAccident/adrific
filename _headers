@@ -1,15 +1,16 @@
-# Cloudflare Pages header rules.
-# The site assets are unhashed (no build step), so without this a returning
-# visitor can keep stale main.css/main.js for hours and pair them with fresh
-# HTML (broken styles, old behaviour). max-age=0 + must-revalidate makes the
-# browser revalidate every load via ETag — a cheap 304 when unchanged, and
-# instantly fresh when we ship an update.
+# Cloudflare Pages header rules. Unhashed assets (no build step) would
+# otherwise stick in a multi-hour browser cache and pair stale CSS/JS with
+# fresh HTML; max-age=0 + must-revalidate makes the browser revalidate each
+# load via ETag (cheap 304 when unchanged, instantly fresh on update).
 
 /
   Cache-Control: public, max-age=0, must-revalidate
+
 /index.html
   Cache-Control: public, max-age=0, must-revalidate
+
 /styles/*
   Cache-Control: public, max-age=0, must-revalidate
+
 /scripts/*
   Cache-Control: public, max-age=0, must-revalidate
