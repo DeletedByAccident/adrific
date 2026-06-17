@@ -23,4 +23,4 @@ Legend: `P0` = ship-blocking, `P1` = should do soon, `P2` = polish.
 
 ---
 
-**Last updated:** 2026-06-16 (LIVE on adrific.fi: redesign + dark mode "Carbon" + FI/EN switch + reference-site reposition + 3D hero, all deployed, commit `aeeb9ff`. See `docs/HISTORY.md`.)
+**Last updated:** 2026-06-17 (Repo restructured: site now in `public/`, project docs tracked in the private repo, `md-examples/` deleted — commit `c4c84b9`, deploy verified live. Prior: LIVE redesign + dark "Carbon" + FI/EN + reposition + 3D hero, commit `aeeb9ff`. See `docs/HISTORY.md`.)
