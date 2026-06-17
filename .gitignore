@@ -1,24 +1,12 @@
-# Cloudflare Pages publishes the repo root (`directory: .`): anything committed
-# here is served publicly at adrific.fi. So only public site assets get committed.
-# Everything below is kept LOCAL (the impeccable tooling still reads the docs on
-# disk). To version-control these instead, scope the Pages publish dir to a
-# site-only folder and remove the relevant lines here.
+# Cloudflare Pages publishes ONLY `public/` (deploy.yml `directory: public`).
+# Nothing outside public/ is served at adrific.fi, so the project docs below are
+# now version-controlled here in the (private) repo. Keep anything secret or
+# deploy-bound out of public/ — that folder, and only that folder, ships.
 
-# Separate project (VAREK) — reference only; MUST NOT be served publicly.
+# Separate project (VAREK) — reference only; backed up elsewhere, not part of this repo.
 md-examples/
 
-# Project-management & design docs — local working files, not part of the site.
-PRODUCT.md
-DESIGN.md
-CLAUDE.md
-AGENTS.md
-README.md
-ROADMAP.md
-TODO.md
-PLAN.md
-docs/
-
-# Dev tooling / skills / live-mode state.
+# Dev tooling / skills / live-mode state (regenerable, machine-local).
 .claude/
 impeccable/
 .impeccable/
