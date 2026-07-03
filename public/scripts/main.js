@@ -102,54 +102,54 @@
 
         // Hero
         reg(q('.kicker'), 'AdRific — Digitaalinen studio · Helsinki');
-        reg(q('.hero__title'), 'Emme lupaile.<br><span class="hero__title-em">Me toimitamme.</span>');
-        reg(q('.hero__lede'), 'Pieni studio Helsingissä. Alla on se, mitä olemme suunnitelleet, rakentaneet ja tuoneet maailmaan.');
+        reg(q('.hero__title'), 'Tehty täällä.<br><span class="hero__title-em">Yhä käytössä.</span>');
+        reg(q('.hero__lede'), 'Pieni studio Helsingissä. Alla: kuusi tuotetta ja valittuja asiakastöitä, kaikki suunniteltu ja rakennettu täällä.');
         reg(q('.btn--stamp'), 'Katso työt <span aria-hidden="true">↓</span>');
-        reg(q('.btn--ghost'), 'Ota yhteyttä');
-        reg(q('.hero__caption'), 'KUVA 01 — kuusi tuotetta ja lisää tulossa, sekä valittuja asiakastöitä.');
+        reg(q('.btn--ghost'), 'Sano hei');
+        reg(q('.hero__caption'), 'KUVA 01 — kuusi tuotetta ja valittuja asiakastöitä, listattuna alla.');
         reg(q('.hero__plate-label'), 'RAKENNE · GENEROITU LIVENÄ');
         regList('.hero__rule .mono', ['A — STUDIO', 'VIERITÄ ↓']);
 
         // Work / build log
         reg(q('.work .section-head__tag'), 'Lehti A — Tuotteet käytössä');
-        reg(q('#work-title'), 'Rakennusloki');
-        reg(q('.work .section-head__intro'), 'Kuusi tuotetta käytössä. Suunnittelemme, rakennamme ja pyöritämme ne alusta loppuun — samalla tekniikalla ja tasolla kuin asiakastyöt.');
+        reg(q('#work-title'), 'Mitä olemme tehneet');
+        reg(q('.work .section-head__intro'), 'Kuusi tuotetta, kaikki omiamme. Suunnittelemme, rakennamme ja pidämme ne käynnissä, päivästä toiseen.');
         regList('.work .plate .plate__desc', [
-            'Takuuajan hallinta uudiskohteiden taloyhtiöille. Vapaaehtoiset hallitukset keräävät rakennusvirheet, laativat reklamaatiot eivätkä myöhästy lakisääteisistä määräajoista kymmenen vuoden vastuuaikana — ilman juridista erityisosaamista.',
-            'Vuokraa autopaikka helposti. Etsi, varaa ja hallitse pysäköintiä koko Suomessa yhdestä paikasta.',
-            'Ampumaharjoittelun seuranta ja valmentaja radalle. Kirjaa jokainen laukaus, saa heti korjaukset otteeseen, asentoon ja liipaisuun, lue lämpökartat ja kehitys harjoitusten välillä, ja kisaa kavereita vastaan reaaliajassa.',
-            'Estää ilmoitusroskan välittömästi. Chrome-laajennus ja Android-sovellus suodattavat push-ilmoitusten tulvan reaaliaikaista roskatietokantaa vasten — ennen kuin ne tavoittavat sinut.',
-            'Todistettavan reilut arvonnat someen. Tuo kommentit yhdellä klikkauksella Facebookista ja YouTubesta ja suorita kryptografisesti todennettava arvonta — voittajat, joita kukaan ei voi kiistää, ja matematiikka, jonka kuka tahansa voi tarkistaa.',
-            'Riippumaton työkalu suomalaiselle metsänomistajalle — kartta, arvonmääritys, hoitomuistutukset ja neutraali puukauppa <em>talousmetsälle</em>, kaikki yhdessä paikassa.'
+            'Takuuajan hallinta uudiskohteiden taloyhtiöille. Vapaaehtoinen hallitus kerää rakennusvirheet, laatii viralliset reklamaatiot ja pitää kiinni jokaisesta lakisääteisestä määräajasta kymmenen vuoden vastuuajan läpi. Ilman juridista koulutusta.',
+            'Autopaikkoja vuokralle. Etsi, varaa ja hallitse paikkaa missä päin Suomea tahansa, yhdestä paikasta.',
+            'Ampumaharjoittelun seuranta ja valmentaja radalle. Kirjaa jokainen laukaus, saa korjaukset otteeseen, asentoon ja liipaisuun saman tien, seuraa lämpökarttoja ja kehitystä harjoitusten yli, ja ammu live-otteluita kavereita vastaan.',
+            'Estää ilmoitusroskan. Chrome-laajennus ja Android-sovellus tarkistavat saapuvat push-ilmoitukset reaaliaikaista roskatietokantaa vasten ja pysäyttävät roskan ennen kuin se tavoittaa sinut.',
+            'Todistettavan reilut arvonnat someen. Tuo kommentit Facebookista tai YouTubesta yhdellä klikkauksella ja suorita arvonta, joka on kryptografisesti todennettavissa. Kuka tahansa voi tarkistaa tuloksen itse.',
+            'Riippumaton työkalu suomalaiselle metsänomistajalle. Kartta, arvonmääritys, hoitomuistutukset ja neutraali puukauppa <em>talousmetsälle</em>, yhdessä paikassa.'
         ]);
         reg(qa('.work .plate .plate__name')[5], 'Metsäomaisuuden seuranta'); // forest working title
 
         // Client work (healthcare delivery)
         reg(q('.delivery__tag'), 'Asiakastyö · Terveydenhuolto');
-        reg(q('.delivery__title'), 'Etävastaanotot, rakennettu niin ettemme koskaan säilytä potilastietoa.');
-        reg(q('.delivery__desc'), 'Toimitimme kolme etävastaanottoalustaa lääkärille, joka siirsi vastaanottonsa verkkoon — turvallisiksi suunniteltuna alusta alkaen. Auditoidut, vaatimustenmukaiset kolmannet osapuolet säilyttävät potilastiedot ja -rekisterit; ne eivät koskaan kosketa palvelimiamme. Luottamus on arkkitehtuurissa, ei lupauksessa.');
+        reg(q('.delivery__title'), 'Etävastaanotot, järjestetty niin ettemme koskaan säilytä potilastietoa.');
+        reg(q('.delivery__desc'), 'Kolme etävastaanottoalustaa lääkärille, joka siirsi vastaanottonsa verkkoon. Potilastiedot ja -rekisterit ovat auditoitujen, vaatimustenmukaisten kolmansien osapuolten hallussa; mikään niistä ei kosketa palvelimiamme. Suunnittelimme sen niin ensimmäisestä piirustuksesta lähtien.');
         regList('.delivery__specs li', [
-            'Kolme etävastaanottoalustaa', 'Turvallisuus suunniteltu alusta alkaen',
-            'Auditoitu kolmannen osapuolen tietojenkäsittely', 'Ei potilastietoa palvelimillamme'
+            'Kolme etävastaanottoalustaa', 'Suunniteltu turvalliseksi alusta asti',
+            'Auditoidut kolmannet osapuolet säilyttävät tiedot', 'Ei potilastietoa palvelimillamme'
         ]);
 
         // Studio
         reg(q('.studio .section-head__tag'), 'Lehti C — AdRific');
         reg(q('#studio-title'), 'Studio');
-        reg(q('.studio__lead'), 'AdRific on pieni rakentajien studio Helsingissä — palvelemme asiakkaita maailmanlaajuisesti.');
-        reg(q('.studio__body'), 'Kirjoitamme koodin ja pyöritämme kampanjat itse — ei välikäsiä, ei luovutuksia. Työt täällä pitävät meidät terävinä: oikeita asioita oikeassa käytössä, samalla rimalla jonka itse asetamme. Siinä koko ansioluettelo.');
+        reg(q('.studio__lead'), 'AdRific on pieni studio Helsingissä. Enimmäkseen rakennamme omia tuotteitamme.');
+        reg(q('.studio__body'), 'Kirjoitamme koodin ja pyöritämme kampanjat itse, ilman välikäsiä. Yllä olevat tuotteet pitävät meidät vireessä: oikeita asioita päivittäisessä käytössä. Silloin tällöin lyöttäydymme yhteen jonkun kanssa, jolla on idea — yllä oleva etähoitotyö syntyi niin.');
         regList('.studio__facts li', [
             '<span>Sijainti</span> Helsinki, Suomi',
-            '<span>Kattavuus</span> Maailmanlaajuinen',
+            '<span>Kattavuus</span> Ympäri maailman',
             '<span>Osaaminen</span> Ohjelmistot · Mainonta · Kasvu'
         ]);
 
         // Contact
         reg(q('.contact .section-head__tag'), 'Lehti D — Yhteys');
-        reg(q('#contact-title'), 'Ota yhteyttä.');
-        reg(q('.contact__lede'), 'Kiinnostaako työt, vai haluatko vain jutella? Meidät tavoittaa helposti.');
-        reg(q('.stamp__kicker'), 'Sano hei');
-        reg(q('.stamp__main'), 'Ota yhteyttä');
+        reg(q('#contact-title'), 'Sano hei.');
+        reg(q('.contact__lede'), 'Tämä sivu on portfolio, ei myyntipuhe. Silloin tällöin autamme silti viemään jonkun idean maaliin — jos sinulla on sellainen, tai haluat vain jutella, kirjoita meille. Vastaamme sähköposteihimme itse.');
+        reg(q('.stamp__kicker'), 'Sähköpostitse');
+        reg(q('.stamp__main'), 'Kirjoita meille');
 
         // Footer title-block values (keys handled by LABELS above)
         regList('.tb-cell__v', [
@@ -160,9 +160,9 @@
         reg(q('.title-block__copy'), '© 2026 AdRific Oy. Piirretty Helsingissä.');
 
         // Meta + aria
-        attr(q('meta[name="description"]'), 'content', 'AdRific on pieni digitaalinen studio Helsingissä. Katsaus tuotteisiin ja asiakastöihin, jotka olemme suunnitelleet, rakentaneet ja julkaisseet. Emme lupaile. Me toimitamme.');
+        attr(q('meta[name="description"]'), 'content', 'AdRific on pieni digitaalinen studio Helsingissä. Suunnittelemme, rakennamme ja pidämme käynnissä. Tällä sivulla on se, mikä on käytössä — kuusi tuotetta ja valittuja asiakastöitä.');
         attr(q('meta[property="og:title"]'), 'content', 'AdRific — Digitaalinen studio Helsingissä');
-        attr(q('meta[property="og:description"]'), 'content', 'Katsaus tuotteisiin ja asiakastöihin, jotka olemme suunnitelleet, rakentaneet ja julkaisseet.');
+        attr(q('meta[property="og:description"]'), 'content', 'Tällä sivulla on se, mikä on käytössä: kuusi tuotetta ja valittuja asiakastöitä.');
         attr(q('meta[property="og:locale"]'), 'content', 'fi_FI');
         attr(q('.brand'), 'aria-label', 'AdRific — etusivu');
         attr(q('.hero__svg'), 'aria-label', 'Isometrinen rakennehila piirrettynä teknisenä kaaviona, mitoitusviivoin.');

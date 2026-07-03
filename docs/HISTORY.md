@@ -4,6 +4,16 @@ Dated shipped-changelog, newest first. Append a short entry for every shipped ch
 
 ---
 
+## 2026-07-02/03 — Copy rewrite: startup slop → organic "ingredient-list" voice, de-salesed (local; pending push)
+
+Per the maintainer: strip the cringy startup register and rewrite so the copy "feels very organic, almost like an ingredient list or cooking instruction." Ran as an `/impeccable clarify` pass: three candidate copy decks (bill-of-materials / procedural-method / pantry-card interpretations) + an adversarial judge; shipped the winning "pantry" deck with the judge's fact-fix grafts.
+
+- **Killed:** "We don't pitch. We ship." (hero + meta), "end-to-end … stack and standard", "how we keep our edge … That's the whole résumé", "The trust is in the architecture, not a promise", "winners no one can dispute, math anyone can check", "the easy way", "talk shop", "and counting".
+- **Now:** hero **"Made here. / Still in use."**; lede "A small studio in Helsinki. Below: six products and selected client work, all designed and built here."; work section "What we've made" with "Six products, all ours…"; plate descs flattened to plain declaratives (facts unchanged — verified copy retained: Provably-fair lead, healthcare quad); delivery closes "We planned it that way from the first drawing."; studio "how we stay in practice"; contact "If something here is close to what you need, write to us. We answer our own email."
+- **FI overlay updated to match** (all changed strings in `i18n()`, still machine-authored — native proof still pending, see TODO). Meta + og descriptions rewritten in both languages.
+- **De-salesed further (07-03, maintainer):** the site is a portfolio, not a pitch for know-how — removed all client-facing framing ("the same habits as the client work below", "close to what you need", "working with clients wherever they are", facts row "Clients" → "Reach"). Collaboration is now a *side mention only*, anchored to the real example: studio body ends "Now and then we team up with someone who has an idea — the remote-care work above happened that way."; contact is now **"Say hello."** with lede "This page is a portfolio, not a pitch. That said, now and then we team up with someone to bring an idea to life…". Stamp: "By email / Write to us". "Get in touch" is gone everywhere (hero ghost → "Say hello").
+- **Cache-bust bumped `?v=2` → `?v=3`** (main.js changed; v=3 never deployed so no second bump needed). Verified headless: EN/FI switch + revert, zero banned phrases in either language (incl. the client-framing list), no overflow at 390 (FI included), no console errors.
+
 ## 2026-06-17 — Repo restructured: site → `public/`, docs now tracked in the private repo
 
 The deployed site was moved into a **`public/`** folder so the project's working docs can be version-controlled without ever being served. Before this, Cloudflare Pages published the whole repo root (`directory: .`), so the only thing keeping PRODUCT.md / CLAUDE.md / DESIGN.md / etc. off the public web was `.gitignore` — which also meant they weren't backed up in git at all. Now:

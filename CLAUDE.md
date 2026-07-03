@@ -31,7 +31,7 @@ When you notice something worth building or fixing, add it to `ROADMAP.md` (or `
 
 ---
 
-## Current status (snapshot, last updated 2026-06-17)
+## Current status (snapshot, last updated 2026-07-02)
 
 Single-page static marketing site, deployed to Cloudflare Pages (project `adrific`; domains `adrific.fi` / `www.adrific.fi`). Company details current (AdRific Oy, Postiljooninkatu 13 A 19, 00240 Helsinki, VAT FI28112047, contact@adrific.fi).
 
@@ -42,6 +42,8 @@ Single-page static marketing site, deployed to Cloudflare Pages (project `adrifi
 **DESIGN.md captured** (2026-06-16) from the shipped system, with the `.impeccable/design.json` sidecar.
 
 **Shipped 2026-06-16 (LIVE on adrific.fi, commit `aeeb9ff`):** (1) **Dark mode "Carbon"** — masthead theme toggle, system-aware + persisted, `--on-accent` / `--stamp-offset` tokens, AA both themes; (2) **FI/EN switch** — EN authored + Finnish JS overlay, auto-detect + persist, masthead EN|FI control, `<html lang>` synced; (3) **Healthcare "Client work"** panel; (4) **Repositioned as a reference/portfolio site** — removed the "What we build for you" services pitch, moved the healthcare block into Work as "Client work", reframed the hero (See the work / Get in touch) + contact (Get in touch) + studio. Nav: Work / Studio / Contact; (5) **3D hero** — the lattice is now a perspective wireframe with auto-spin + drag-to-rotate (mouse) + depth shading + a roaming coral marker. (At the time, the `.gitignore` scoped the Pages publish to site files only; superseded 2026-06-17 by the `public/` restructure — see the status note above.)
+
+**Copy rewritten 2026-07-02/03 (local; pending push):** the startup register ("We don't pitch. We ship.", "end-to-end", "keep our edge", punch-line endings) is gone — replaced with an organic, ingredient-list voice, then **de-salesed**: this is a portfolio, not a pitch for know-how. No client-facing framing anywhere; collaboration appears only as a side mention (studio body + the "Say hello." contact lede, anchored to the remote-care example). Hero: **"Made here. / Still in use."**; work: "What we've made"; contact: "Say hello." / "Write to us". EN in `public/index.html`, FI overlay matched (machine-authored, native proof pending). Assets bumped to `?v=3`. See `docs/HISTORY.md`.
 
 **Next:** native proof of the Finnish copy (machine-authored — see TODO); a real public name for the forest app (codename Metsäni); optional product logos; SEO/OG image; refresh DESIGN.md + sidecar for the dark theme + 3D hero.
 
@@ -66,7 +68,7 @@ Single-page static marketing site, deployed to Cloudflare Pages (project `adrifi
 
 - **Only `public/` ships.** `deploy.yml` publishes `public/` (`directory: public`); anything you put there is served at adrific.fi. Keep docs, notes, and secrets **outside** `public/`. The flip side: a new site asset must go *into* `public/` or it won't deploy.
 - **Gradient text + the generic-SaaS look are bugs, not style** here — PRODUCT.md names them as the primary anti-reference. Don't reintroduce them.
-- **Cache-bust CSS/JS on every change.** Cloudflare Pages serves static assets with `Cache-Control: public, max-age=14400` and **`_headers` does NOT override it** (confirmed: forced-MISS origin still returns 14400 — a Pages limitation with the current `cloudflare/pages-action@v1`). So returning visitors can pair fresh HTML with 4h-stale CSS/JS. The fix in use: **versioned asset URLs** in `public/index.html` (`styles/main.css?v=N`, `scripts/main.js?v=N`) — **bump `N` whenever `main.css` or `main.js` changes** (currently `v=2`). `public/_headers` still works for non-cache headers (e.g. security headers).
+- **Cache-bust CSS/JS on every change.** Cloudflare Pages serves static assets with `Cache-Control: public, max-age=14400` and **`_headers` does NOT override it** (confirmed: forced-MISS origin still returns 14400 — a Pages limitation with the current `cloudflare/pages-action@v1`). So returning visitors can pair fresh HTML with 4h-stale CSS/JS. The fix in use: **versioned asset URLs** in `public/index.html` (`styles/main.css?v=N`, `scripts/main.js?v=N`) — **bump `N` whenever `main.css` or `main.js` changes** (currently `v=3`). `public/_headers` still works for non-cache headers (e.g. security headers).
 
 ---
 

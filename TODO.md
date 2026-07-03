@@ -9,7 +9,7 @@ Legend: `P0` = ship-blocking, `P1` = should do soon, `P2` = polish.
 
 ## Open work
 
-- [ ] **P1 — Native proof of the Finnish copy.** The FI translation (full page incl. hero, build log, capabilities, the healthcare delivery, studio, contact, footer, meta) is polished-but-machine-authored. Have a native Finnish speaker proof it before relying on it publicly. Strings live in the `i18n()` module in `scripts/main.js`. A couple to eyeball first: the hero "Emme lupaile. Me toimitamme.", "Rakennusloki" (build log), the contact title "Rakennetaan teidän tuotteenne."
+- [ ] **P1 — Native proof of the Finnish copy.** The FI translation (full page incl. hero, work, healthcare delivery, studio, contact, meta) is machine-authored — rewritten 2026-07-02 with the organic-voice copy pass. Have a native Finnish speaker proof it before relying on it publicly. Strings live in the `i18n()` module in `public/scripts/main.js`. Eyeball first: hero "Tehty täällä. / Yhä käytössä.", work title "Mitä olemme tehneet", studio "pitävät meidät vireessä", contact "Vastaamme sähköposteihimme itse."
 - [ ] **P1 — Real public name for the forest app.** Ships as "Forest asset tracker / Internal test" (codename **Metsäni** is dev-only). Swap in the real name once chosen. (ROADMAP §2)
 - [ ] **P2 — Refresh DESIGN.md + `.impeccable/design.json`** for the dark "Carbon" theme + `--on-accent`/`--stamp-offset` tokens, the theme/lang controls, and the 3D perspective hero (currently document the light system + flat-iso hero only).
 - [ ] **P2 — Optional product logos** for the plates (currently each uses a hand-built schematic glyph, which works well as-is). (ROADMAP §2)
